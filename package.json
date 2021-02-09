@@ -1,0 +1,20 @@
+{
+  "name": "employee_tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "database.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johnjegede/employee_tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/johnjegede/employee_tracker/issues"
+  },
+  "homepage": "https://github.com/johnjegede/employee_tracker#readme"
+}
