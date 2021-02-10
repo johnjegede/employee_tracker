@@ -16,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/johnjegede/employee_tracker/issues"
   },
-  "homepage": "https://github.com/johnjegede/employee_tracker#readme"
+  "homepage": "https://github.com/johnjegede/employee_tracker#readme",
+  "dependencies": {
+    "inquirer": "^7.3.3",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.7"
+  }
 }
