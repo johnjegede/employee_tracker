@@ -88,46 +88,19 @@ function addDepartment() {
     });
 }
 
-function getDepartment() {
-  deptData = [];
-  connection.query("SELECT * FROM department", function (err, res) {
-    if (err) throw err;
+async function addRole() {
+  let getDepartment = new Promise((resolve, reject) => {
+    deptData = [];
+    connection.query("SELECT * FROM department", function (err, res) {
+      if (err) throw err;
 
-    for (i = 0; i < res.length; i++) {
-      deptData.push(res[i].name);
-    }
-    deptRes = res;
+      for (i = 0; i < res.length; i++) {
+        deptData.push(res[i].name);
+      }
+      deptRes = res;
+      resolve(deptData);
+    });
   });
-}
-
-function getRole() {
-  roleData = [];
-  connection.query("SELECT * FROM role", function (err, res) {
-    if (err) throw err;
-
-    for (i = 0; i < res.length; i++) {
-      roleData.push(res[i].title);
-    }
-    //console.log(roleData);
-    roleRes = res;
-  });
-}
-
-function getManager() {
-  managerData = ["none"];
-  connection.query("SELECT id,first_name FROM employee", function (err, res) {
-    if (err) throw err;
-
-    for (i = 0; i < res.length; i++) {
-      managerData.push(res[i].first_name);
-    }
-    //console.log(managerData);
-    managerRes = res;
-  });
-}
-
-function addRole() {
-  getDepartment();
 
   inquirer
     .prompt([
@@ -144,7 +117,7 @@ function addRole() {
       {
         type: "list",
         message: "What is the name of the department?",
-        choices: deptData,
+        choices: await getDepartment,
         name: "department",
       },
     ])
@@ -169,9 +142,36 @@ function addRole() {
     });
 }
 
-function addEmployee() {
-  getRole();
-  getManager();
+async function addEmployee() {
+  //getRole();
+  //getManager();
+  let getRole = new Promise((resolve, reject) => {
+    roleData = [];
+    connection.query("SELECT * FROM role", function (err, res) {
+      if (err) throw err;
+
+      for (i = 0; i < res.length; i++) {
+        roleData.push(res[i].title);
+      }
+      //console.log(roleData);
+      roleRes = res;
+      resolve(roleData);
+    });
+  });
+
+  let getManager = new Promise((resolve, reject) => {
+    managerData = ["none"];
+    connection.query("SELECT id,first_name FROM employee", function (err, res) {
+      if (err) throw err;
+
+      for (i = 0; i < res.length; i++) {
+        managerData.push(res[i].first_name);
+      }
+      //console.log(managerData);
+      managerRes = res;
+      resolve(managerData);
+    });
+  });
 
   inquirer
     .prompt([
@@ -188,13 +188,13 @@ function addEmployee() {
       {
         type: "list",
         message: "What is the employee's role? ",
-        choices: roleData,
+        choices: await getRole,
         name: "role",
       },
       {
         type: "list",
         message: "What is the employee's manager? ",
-        choices: managerData,
+        choices: await getManager,
         name: "manager",
       },
     ])
@@ -256,22 +256,50 @@ function viewEmployee() {
   });
 }
 
-function updateEmployee() {
-  getRole();
-  getManager();
+async function updateEmployee() {
+  let getRole = new Promise((resolve, reject) => {
+    roleData = [];
+    connection.query("SELECT * FROM role", function (err, res) {
+      if (err) throw err;
+
+      for (i = 0; i < res.length; i++) {
+        roleData.push(res[i].title);
+      }
+      //console.log(roleData);
+      roleRes = res;
+      resolve(roleData);
+    });
+  });
+
+  let getEmployee = new Promise((resolve, reject) => {
+    managerData = [];
+    connection.query(
+      "SELECT id,first_name,last_name FROM employee",
+      function (err, res) {
+        if (err) throw err;
+
+        for (i = 0; i < res.length; i++) {
+          managerData.push(res[i].first_name);
+        }
+        //console.log(managerData);
+        managerRes = res;
+        resolve(managerData);
+      }
+    );
+  });
   inquirer
     .prompt([
       {
         type: "list",
         message: "Which employee's role do you want to update?",
-        choices: managerData.shift(),
-        name: "name"
+        choices: await getEmployee,
+        name: "name",
       },
       {
         type: "list",
         message: "What is the employee's new role?",
-        choices:roleData,
-        name: "role"
+        choices: await getRole,
+        name: "role",
       },
     ])
     .then(function (response) {
