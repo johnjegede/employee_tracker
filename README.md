@@ -19,3 +19,5 @@ Then follow the prompt on your screen
 
 Here is the video
 [video](images/video.mp4)
+
+OR You can check the images folder for the vide0
